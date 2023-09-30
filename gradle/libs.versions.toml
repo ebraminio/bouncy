@@ -1,0 +1,11 @@
+[versions]
+agp = "8.1.2"
+annotation = "1.6.0"
+dynamicanimation = "1.0.0"
+
+[libraries]
+annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
+dynamicanimation = { group = "androidx.dynamicanimation", name = "dynamicanimation", version.ref = "dynamicanimation" }
+
+[plugins]
+com-android-application = { id = "com.android.application", version.ref = "agp" }
