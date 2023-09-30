@@ -1,0 +1,25 @@
+name: Android CI
+
+permissions:
+  contents: read
+
+on: [push]
+
+jobs:
+  upload-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: gradle/wrapper-validation-action@v1
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Build APK
+        run: ./gradlew assembleRelease --stacktrace
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: bouncy.apk
+          path: app/build/outputs/apk/release/app-release.apk
