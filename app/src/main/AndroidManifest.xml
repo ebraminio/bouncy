@@ -3,6 +3,7 @@
 
     <application
         android:icon="@drawable/ic_launcher"
+        android:label="Bouncy"
         android:supportsRtl="true">
         <activity
             android:name=".MainActivity"

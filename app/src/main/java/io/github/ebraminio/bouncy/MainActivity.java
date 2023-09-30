@@ -8,8 +8,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.GestureDetector;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setNavigationBarColor(Color.TRANSPARENT);
         window.setStatusBarColor(Color.TRANSPARENT);
-        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
 
         setContentView(new Bouncy(this));
     }
@@ -116,27 +116,27 @@ class Bouncy extends View {
             verticalFling.setStartVelocity(-storedVelocityY).start();
             isWallHit = true;
         }
-        if (isWallHit) Log.d("", "Wall Hit");
+        if (isWallHit) performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK);
     }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         flingDetector.onTouchEvent(event);
         switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_DOWN -> {
                 horizontalFling.cancel();
                 verticalFling.cancel();
                 previousX = event.getX();
                 previousY = event.getY();
-                break;
+            }
 
-            case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_MOVE -> {
                 x.setValue(x.getValue() + event.getX() - previousX);
                 y.setValue(y.getValue() + event.getY() - previousY);
                 previousX = event.getX();
                 previousY = event.getY();
                 invalidate();
-                break;
+            }
         }
         return true;
     }
