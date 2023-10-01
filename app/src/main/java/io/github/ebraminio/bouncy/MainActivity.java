@@ -2,6 +2,7 @@ package io.github.ebraminio.bouncy;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -49,7 +50,10 @@ public class MainActivity extends Activity {
             window.getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
             window.setNavigationBarColor(Color.TRANSPARENT);
             window.setStatusBarColor(Color.TRANSPARENT);
-            window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+
+            var color = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                    == Configuration.UI_MODE_NIGHT_YES ? Color.BLACK : Color.WHITE;
+            window.setBackgroundDrawable(new ColorDrawable(color));
 
             var controller = getWindow().getInsetsController();
             if (controller != null) {
