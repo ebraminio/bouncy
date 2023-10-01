@@ -44,6 +44,7 @@ public class MainActivity extends Activity {
         final var window = getWindow();
         window.setDecorFitsSystemWindows(false);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
         window.setNavigationBarColor(Color.TRANSPARENT);
         window.setStatusBarColor(Color.TRANSPARENT);
         window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
