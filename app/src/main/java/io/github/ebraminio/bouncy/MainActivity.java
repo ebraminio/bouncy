@@ -115,11 +115,12 @@ class Bouncy extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        x.setValue(w / 2f);
-        y.setValue(h / 2f);
+        if (path.isEmpty()) {
+            x.setValue(w / 2f);
+            y.setValue(h / 2f);
+            path.moveTo(x.getValue(), y.getValue());
+        }
         r = Math.min(w, h) / 20f;
-        path.rewind();
-        path.moveTo(x.getValue(), y.getValue());
     }
 
     @Override
