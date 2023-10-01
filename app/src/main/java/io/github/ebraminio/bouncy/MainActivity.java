@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowInsets;
@@ -110,16 +111,31 @@ class Bouncy extends View {
         paint.setColor(Color.GRAY);
         linesPaint.setColor(Color.GRAY);
         linesPaint.setStyle(Paint.Style.STROKE);
+        setFocusable(true);
     }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getAction() != KeyEvent.ACTION_DOWN) return false;
+        switch (event.getKeyCode()) {
+            case KeyEvent.KEYCODE_DPAD_UP -> verticalFling.setStartVelocity(-4500).start();
+            case KeyEvent.KEYCODE_DPAD_DOWN -> verticalFling.setStartVelocity(4500).start();
+            case KeyEvent.KEYCODE_DPAD_LEFT -> horizontalFling.setStartVelocity(-4500).start();
+            case KeyEvent.KEYCODE_DPAD_RIGHT -> horizontalFling.setStartVelocity(4500).start();
+        }
+        return true;
+    }
+
+    private boolean initialized = false;
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if (path.isEmpty()) {
-            x.setValue(w / 2f);
-            y.setValue(h / 2f);
-            path.moveTo(x.getValue(), y.getValue());
-        }
+        if (initialized) return;
+        x.setValue(w / 2f);
+        y.setValue(h / 2f);
+        path.moveTo(x.getValue(), y.getValue());
+        initialized = true;
         r = Math.min(w, h) / 20f;
     }
 
