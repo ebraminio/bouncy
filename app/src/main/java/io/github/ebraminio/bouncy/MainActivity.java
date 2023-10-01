@@ -85,7 +85,7 @@ class Bouncy extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         x.setValue(w / 2f);
         y.setValue(h / 2f);
-        r = w / 20f;
+        r = Math.min(w, h) / 20f;
         path.rewind();
         path.moveTo(x.getValue(), y.getValue());
     }
