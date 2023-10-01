@@ -16,6 +16,9 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // https://stackoverflow.com/a/75544119
+    packaging { dex { useLegacyPackaging = true } }
+
     buildTypes {
         release {
             isMinifyEnabled = false
