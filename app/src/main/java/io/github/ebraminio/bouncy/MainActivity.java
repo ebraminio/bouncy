@@ -171,7 +171,7 @@ class Bouncy extends View {
         }
         if (isWallHit) {
             playSound();
-            performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+            performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         }
     }
 
