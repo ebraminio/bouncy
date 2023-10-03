@@ -118,10 +118,14 @@ class Bouncy extends View {
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() != KeyEvent.ACTION_DOWN) return false;
         switch (event.getKeyCode()) {
-            case KeyEvent.KEYCODE_DPAD_UP -> verticalFling.setStartVelocity(-4500).start();
-            case KeyEvent.KEYCODE_DPAD_DOWN -> verticalFling.setStartVelocity(4500).start();
-            case KeyEvent.KEYCODE_DPAD_LEFT -> horizontalFling.setStartVelocity(-4500).start();
-            case KeyEvent.KEYCODE_DPAD_RIGHT -> horizontalFling.setStartVelocity(4500).start();
+            case KeyEvent.KEYCODE_W, KeyEvent.KEYCODE_DPAD_UP ->
+                    verticalFling.setStartVelocity(-4500).start();
+            case KeyEvent.KEYCODE_S, KeyEvent.KEYCODE_DPAD_DOWN ->
+                    verticalFling.setStartVelocity(4500).start();
+            case KeyEvent.KEYCODE_A, KeyEvent.KEYCODE_DPAD_LEFT ->
+                    horizontalFling.setStartVelocity(-4500).start();
+            case KeyEvent.KEYCODE_D, KeyEvent.KEYCODE_DPAD_RIGHT ->
+                    horizontalFling.setStartVelocity(4500).start();
         }
         return true;
     }
