@@ -3,7 +3,7 @@
 
     <application
         android:icon="@mipmap/ic_launcher"
-        android:label="Bouncy"
+        android:label="@string/app_name"
         android:supportsRtl="true">
         <activity
             android:name=".MainActivity"
