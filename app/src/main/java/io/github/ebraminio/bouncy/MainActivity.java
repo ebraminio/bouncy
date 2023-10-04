@@ -29,6 +29,7 @@ import androidx.dynamicanimation.animation.FlingAnimation;
 import androidx.dynamicanimation.animation.FloatValueHolder;
 
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends Activity {
 
@@ -201,11 +202,18 @@ class Bouncy extends View {
         return true;
     }
 
+    private String jingleBells = "EEEEEEEGCDEFFFFFEEEEEDDEDGEEEEEEEGCDEFFFFFEEEEGGFDC";
+    private int[] majorScale = {0, 2, 4, 5, 7};
+    private int[] minorScale = {0, 2, 3, 5, 7};
+    private AtomicInteger counter = new AtomicInteger(0);
+
     private void playSound() {
         new Thread(() -> {
+            int index = counter.getAndAdd(1) % jingleBells.length();
+            int note = majorScale[jingleBells.charAt(index) - 'C'];
             var sampleRate = 44100;
             var buffer =
-                    guitarString(sampleRate, getStandardFrequency(MIDDLE_A_SEMITONE + new Random().nextDouble() * 20), 4);
+                    guitarString(sampleRate, getStandardFrequency(MIDDLE_A_SEMITONE + note), 4);
             var audioTrack = new AudioTrack(
                     AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
                     AudioFormat.ENCODING_PCM_16BIT, buffer.length, AudioTrack.MODE_STATIC
