@@ -2,12 +2,14 @@ package io.github.ebraminio.bouncy;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.RippleDrawable;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -98,9 +100,11 @@ class Bouncy extends View {
     private float storedVelocityX = 0;
     private float storedVelocityY = 0;
     private final Path path = new Path();
+    private final RippleDrawable rippleDrawable = new RippleDrawable(ColorStateList.valueOf(0x20808080), null, null);
 
     Bouncy(Context context) {
         super(context);
+        setBackground(rippleDrawable);
         horizontalFling.addUpdateListener((a, v, velocity) -> {
             storedVelocityX = velocity;
             invalidate();
@@ -175,6 +179,9 @@ class Bouncy extends View {
             isWallHit = true;
         }
         if (isWallHit) {
+            setPressed(false);
+            rippleDrawable.setHotspot(x.getValue(), y.getValue());
+            setPressed(true);
             playSound();
             performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         }
