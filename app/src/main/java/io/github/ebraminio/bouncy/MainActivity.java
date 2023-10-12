@@ -55,11 +55,14 @@ public class MainActivity extends Activity {
             window.setNavigationBarColor(Color.TRANSPARENT);
             window.setStatusBarColor(Color.TRANSPARENT);
 
-            var color = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
-                    == Configuration.UI_MODE_NIGHT_YES ? Color.BLACK : Color.WHITE;
+            final var isNight = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+            var color = isNight ? Color.BLACK : Color.WHITE;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                color = getColor(isNight ? android.R.color.system_accent1_1000 : android.R.color.system_accent1_50);
+            }
             window.setBackgroundDrawable(new ColorDrawable(color));
 
-            var controller = getWindow().getInsetsController();
+            final var controller = getWindow().getInsetsController();
             if (controller != null) {
                 controller.hide(WindowInsets.Type.systemBars());
                 controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
@@ -212,16 +215,18 @@ class Bouncy extends View {
     private String jingleBells = "EEEEEEEGCDEFFFFFEEEEEDDEDGEEEEEEEGCDEFFFFFEEEEGGFDC";
     private int[] majorScale = {0, 2, 4, 5, 7};
     private int[] minorScale = {0, 2, 3, 5, 7};
-    private AtomicInteger counter = new AtomicInteger(0);
+    private int counter = 0;
 
     private void playSound() {
+        final var index = ++counter % jingleBells.length();
+        final var reverse = (counter / jingleBells.length()) % 2 == 1;
+        final var i = reverse ? jingleBells.length() - index - 1 : index;
         new Thread(() -> {
-            int index = counter.getAndAdd(1) % jingleBells.length();
-            int note = majorScale[jingleBells.charAt(index) - 'C'];
-            var sampleRate = 44100;
-            var buffer =
+            final var note = majorScale[jingleBells.charAt(i) - 'C'];
+            final var sampleRate = 44100;
+            final var buffer =
                     guitarString(sampleRate, getStandardFrequency(MIDDLE_A_SEMITONE + note), 4);
-            var audioTrack = new AudioTrack(
+            final var audioTrack = new AudioTrack(
                     AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
                     AudioFormat.ENCODING_PCM_16BIT, buffer.length, AudioTrack.MODE_STATIC
             );
@@ -237,7 +242,7 @@ class Bouncy extends View {
     private final double MIDDLE_A_SEMITONE = 69;
 
     private double getStandardFrequency(double note) {
-        double MIDDLE_A_FREQUENCY = 440;
+        final var MIDDLE_A_FREQUENCY = 440;
         return MIDDLE_A_FREQUENCY * Math.pow(2.0, (note - MIDDLE_A_SEMITONE) / 12);
     }
 
@@ -286,8 +291,8 @@ class Bouncy extends View {
         }
 
         // Dynamic-level lowpass filter. L ∈ (0, 1/3)
-        var wTilde = Math.PI * frequency / sampleRate;
-        var buffer = new double[samples.length];
+        final var wTilde = Math.PI * frequency / sampleRate;
+        final var buffer = new double[samples.length];
         buffer[0] = wTilde / (1 + wTilde) * samples[0];
         for (int i = 1; i < samples.length; ++i) {
             buffer[i] = wTilde / (1 + wTilde) * (samples[i] + samples[i - 1]) + (1 - wTilde) / (1 + wTilde) * buffer[i - 1];
@@ -299,7 +304,7 @@ class Bouncy extends View {
         var max = .0;
         for (double sample : samples) max = Math.max(max, Math.abs(sample));
 
-        var result = new short[samples.length];
+        final var result = new short[samples.length];
         for (int i = 0; i < result.length; ++i) {
             result[i] = (short) (samples[i] / max * Short.MAX_VALUE);
         }
