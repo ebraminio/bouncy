@@ -31,7 +31,6 @@ import androidx.dynamicanimation.animation.FlingAnimation;
 import androidx.dynamicanimation.animation.FloatValueHolder;
 
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainActivity extends Activity {
 
@@ -103,7 +102,7 @@ class Bouncy extends View {
     private float storedVelocityX = 0;
     private float storedVelocityY = 0;
     private final Path path = new Path();
-    private final RippleDrawable rippleDrawable = new RippleDrawable(ColorStateList.valueOf(0x20808080), null, null);
+    private final RippleDrawable rippleDrawable = new RippleDrawable(ColorStateList.valueOf(0x10808080), null, null);
 
     Bouncy(Context context) {
         super(context);
@@ -213,16 +212,16 @@ class Bouncy extends View {
     }
 
     private String jingleBells = "EEEEEEEGCDEFFFFFEEEEEDDEDGEEEEEEEGCDEFFFFFEEEEGGFDC";
-    private int[] majorScale = {0, 2, 4, 5, 7};
+    private int[] majorScale = {0, 2, 4, 5, 7, 9, 11, 12, 11, 9, 7, 5, 4, 2};
     private int[] minorScale = {0, 2, 3, 5, 7};
     private int counter = 0;
+    private Random random = new Random();
 
     private void playSound() {
-        final var index = ++counter % jingleBells.length();
-        final var reverse = (counter / jingleBells.length()) % 2 == 1;
-        final var i = reverse ? jingleBells.length() - index - 1 : index;
+        rippleDrawable.setColor(ColorStateList.valueOf(Color.argb(0x10, random.nextInt(256), random.nextInt(256), random.nextInt(256))));
+        final var index = ++counter % majorScale.length;
         new Thread(() -> {
-            final var note = majorScale[jingleBells.charAt(i) - 'C'];
+            final var note = majorScale[index];
             final var sampleRate = 44100;
             final var buffer =
                     guitarString(sampleRate, getStandardFrequency(MIDDLE_A_SEMITONE + note), 4);
