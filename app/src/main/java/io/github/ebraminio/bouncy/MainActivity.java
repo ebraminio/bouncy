@@ -7,7 +7,6 @@ import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.media.AudioFormat;
@@ -211,17 +210,15 @@ class Bouncy extends View {
         return true;
     }
 
-    private String jingleBells = "EEEEEEEGCDEFFFFFEEEEEDDEDGEEEEEEEGCDEFFFFFEEEEGGFDC";
-    private int[] majorScale = {0, 2, 4, 5, 7, 9, 11, 12, 11, 9, 7, 5, 4, 2};
-    private int[] minorScale = {0, 2, 3, 5, 7};
+    private int[] diatonicScale = {0, 2, 4, 5, 7, 9, 11, 12, 11, 9, 7, 5, 4, 2};
     private int counter = 0;
     private Random random = new Random();
 
     private void playSound() {
         rippleDrawable.setColor(ColorStateList.valueOf(Color.argb(0x10, random.nextInt(256), random.nextInt(256), random.nextInt(256))));
-        final var index = ++counter % majorScale.length;
+        final var index = ++counter % diatonicScale.length;
         new Thread(() -> {
-            final var note = majorScale[index];
+            final var note = diatonicScale[index];
             final var sampleRate = 44100;
             final var buffer =
                     guitarString(sampleRate, getStandardFrequency(MIDDLE_A_SEMITONE + note), 4);
