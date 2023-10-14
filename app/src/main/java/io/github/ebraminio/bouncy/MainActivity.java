@@ -67,7 +67,7 @@ public class MainActivity extends Activity {
             }
         } else {
             window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-            View decorView = window.getDecorView();
+            final View decorView = window.getDecorView();
             decorView.setSystemUiVisibility(
                     View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                             | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -94,16 +94,16 @@ class Bouncy extends View {
         }
     });
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint linesPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    // private final Paint linesPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private float r = 0;
     private float previousX = 0;
     private float previousY = 0;
     private float storedVelocityX = 0;
     private float storedVelocityY = 0;
     // private final Path path = new Path();
-    private final RippleDrawable rippleDrawable = new RippleDrawable(ColorStateList.valueOf(0x10808080), null, null);
+    private final RippleDrawable rippleDrawable = new RippleDrawable(ColorStateList.valueOf(Color.WHITE), null, null);
 
-    Bouncy(Context context) {
+    Bouncy(final Context context) {
         super(context);
         setBackground(rippleDrawable);
         horizontalFling.addUpdateListener((a, v, velocity) -> {
@@ -115,8 +115,8 @@ class Bouncy extends View {
             invalidate();
         });
         paint.setColor(Color.GRAY);
-        linesPaint.setColor(Color.GRAY);
-        linesPaint.setStyle(Paint.Style.STROKE);
+        // linesPaint.setColor(Color.GRAY);
+        // linesPaint.setStyle(Paint.Style.STROKE);
         setFocusable(true);
     }
 
@@ -179,13 +179,7 @@ class Bouncy extends View {
             verticalFling.setStartVelocity(-storedVelocityY).start();
             isWallHit = true;
         }
-        if (isWallHit) {
-            setPressed(false);
-            rippleDrawable.setHotspot(x.getValue(), y.getValue());
-            setPressed(true);
-            playSound();
-            performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-        }
+        if (isWallHit) onWallHit();
     }
 
     @Override
@@ -214,8 +208,13 @@ class Bouncy extends View {
     private int counter = 0;
     private Random random = new Random();
 
-    private void playSound() {
+    private void onWallHit() {
         rippleDrawable.setColor(ColorStateList.valueOf(Color.argb(0x10, random.nextInt(256), random.nextInt(256), random.nextInt(256))));
+        setPressed(false);
+        rippleDrawable.setHotspot(x.getValue(), y.getValue());
+        setPressed(true);
+        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+
         final var index = ++counter % diatonicScale.length;
         new Thread(() -> {
             final var note = diatonicScale[index];
@@ -243,8 +242,7 @@ class Bouncy extends View {
     }
 
     // Based on https://habr.com/ru/post/514844/ and https://timiskhakov.github.io/posts/programming-guitar-music
-    private short[] guitarString(final int sampleRate, final double frequency,
-                                 final double duration/*1.0*/) {
+    private short[] guitarString(int sampleRate, double frequency, double duration/*1.0*/) {
         final var p = .9;
         final var beta = .1;
         final var s = .1;
@@ -276,12 +274,12 @@ class Bouncy extends View {
         // First-order string-tuning allpass filter
         for (var i = n; i < samples.length; ++i) {
             // delay line
-            var delayLine = samples[i - n];
-            var delayLineM1 = (i - 1 - n) > 0 ? samples[i - 1 - n] : 0;
-            var delayLineM2 = (i - 2 - n) > 0 ? samples[i - 2 - n] : 0;
+            final var delayLine = samples[i - n];
+            final var delayLineM1 = (i - 1 - n) > 0 ? samples[i - 1 - n] : 0;
+            final var delayLineM2 = (i - 2 - n) > 0 ? samples[i - 2 - n] : 0;
             // String-dampling filter.
-            var stringDamplingFilter = .996 * ((1 - s) * delayLine + s * delayLineM1);
-            var stringDamplingFilterM1 = .996 * ((1 - s) * delayLineM1 + s * delayLineM2);
+            final var stringDamplingFilter = .996 * ((1 - s) * delayLine + s * delayLineM1);
+            final var stringDamplingFilterM1 = .996 * ((1 - s) * delayLineM1 + s * delayLineM2);
 
             samples[i] = c * (stringDamplingFilter - samples[i - 1]) + stringDamplingFilterM1;
         }
@@ -298,7 +296,7 @@ class Bouncy extends View {
         }
 
         var max = .0;
-        for (double sample : samples) max = Math.max(max, Math.abs(sample));
+        for (final double sample : samples) max = Math.max(max, Math.abs(sample));
 
         final var result = new short[samples.length];
         for (int i = 0; i < result.length; ++i) {
