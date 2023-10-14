@@ -101,7 +101,7 @@ class Bouncy extends View {
     private float previousY = 0;
     private float storedVelocityX = 0;
     private float storedVelocityY = 0;
-    private final Path path = new Path();
+    // private final Path path = new Path();
     private final RippleDrawable rippleDrawable = new RippleDrawable(ColorStateList.valueOf(0x10808080), null, null);
 
     Bouncy(Context context) {
@@ -145,15 +145,15 @@ class Bouncy extends View {
         if (initialized) return;
         x.setValue(w / 2f);
         y.setValue(h / 2f);
-        path.moveTo(x.getValue(), y.getValue());
+        // path.moveTo(x.getValue(), y.getValue());
         initialized = true;
         r = Math.min(w, h) / 20f;
     }
 
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
-        path.lineTo(x.getValue(), y.getValue());
-        canvas.drawPath(path, linesPaint);
+        // path.lineTo(x.getValue(), y.getValue());
+        // canvas.drawPath(path, linesPaint);
         canvas.drawCircle(x.getValue(), y.getValue(), r, paint);
         var isWallHit = false;
         if (x.getValue() < r) {
