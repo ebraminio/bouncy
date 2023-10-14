@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
             final var isNight = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
             var color = isNight ? Color.BLACK : Color.WHITE;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                color = getColor(isNight ? android.R.color.system_accent1_1000 : android.R.color.system_accent1_50);
+                color = getColor(isNight ? android.R.color.system_accent2_900 : android.R.color.system_accent2_50);
             }
             window.setBackgroundDrawable(new ColorDrawable(color));
 
@@ -115,6 +115,9 @@ class Bouncy extends View {
             invalidate();
         });
         paint.setColor(Color.GRAY);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            paint.setColor(context.getColor(android.R.color.system_accent1_500));
+        }
         // linesPaint.setColor(Color.GRAY);
         // linesPaint.setStyle(Paint.Style.STROKE);
         setFocusable(true);
