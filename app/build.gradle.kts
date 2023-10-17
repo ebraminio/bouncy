@@ -38,8 +38,5 @@ android {
 }
 
 dependencies {
-    implementation(libs.dynamicanimation) {
-        exclude("androidx.core", "core")
-        exclude("androidx.legacy", "legacy-support-core-utils")
-    }
+    implementation(libs.annotation)
 }
