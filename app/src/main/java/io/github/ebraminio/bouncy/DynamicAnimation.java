@@ -17,6 +17,7 @@ package io.github.ebraminio.bouncy;
 
 import android.os.Looper;
 import android.util.AndroidRuntimeException;
+import android.util.FloatProperty;
 import android.view.View;
 
 import androidx.annotation.FloatRange;
@@ -43,7 +44,7 @@ public abstract class DynamicAnimation<T extends DynamicAnimation<T>>
      * created with a {@link DynamicAnimation.ViewProperty} instance, the corresponding property value of the view
      * will be updated through this ViewProperty instance.
      */
-    public abstract static class ViewProperty extends FloatPropertyCompat<View> {
+    public abstract static class ViewProperty extends FloatProperty<View> {
         private ViewProperty(String name) {
             super(name);
         }
@@ -86,7 +87,7 @@ public abstract class DynamicAnimation<T extends DynamicAnimation<T>>
     final Object mTarget;
 
     // View property id.
-    final FloatPropertyCompat mProperty;
+    final FloatProperty mProperty;
 
     // Package private tracking of animation lifecycle state. Visible to subclass animations.
     boolean mRunning = false;
@@ -119,9 +120,9 @@ public abstract class DynamicAnimation<T extends DynamicAnimation<T>>
      */
     DynamicAnimation(final FloatValueHolder floatValueHolder) {
         mTarget = null;
-        mProperty = new FloatPropertyCompat("FloatValueHolder") {
+        mProperty = new FloatProperty("FloatValueHolder") {
             @Override
-            public float getValue(Object object) {
+            public Object get(Object object) {
                 return floatValueHolder.getValue();
             }
 
@@ -140,7 +141,7 @@ public abstract class DynamicAnimation<T extends DynamicAnimation<T>>
      * @param property the property to be animated
      */
 
-    <K> DynamicAnimation(K object, FloatPropertyCompat<K> property) {
+    <K> DynamicAnimation(K object, FloatProperty<K> property) {
         mTarget = object;
         mProperty = property;
         mMinVisibleChange = MIN_VISIBLE_CHANGE_PIXELS;
@@ -459,7 +460,7 @@ public abstract class DynamicAnimation<T extends DynamicAnimation<T>>
      * Obtain the property value through the corresponding getter.
      */
     private float getPropertyValue() {
-        return mProperty.getValue(mTarget);
+        return (float) mProperty.get(mTarget);
     }
 
     /****************Sub class animations**************/

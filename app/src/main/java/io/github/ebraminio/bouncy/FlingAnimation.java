@@ -16,6 +16,8 @@ package io.github.ebraminio.bouncy;
  * limitations under the License.
  */
 
+import android.util.FloatProperty;
+
 import androidx.annotation.FloatRange;
 
 /**
@@ -66,7 +68,7 @@ public final class FlingAnimation extends DynamicAnimation<FlingAnimation> {
      * @param property the property to be animated
      * @param <K>      the class on which the property is declared
      */
-    public <K> FlingAnimation(K object, FloatPropertyCompat<K> property) {
+    public <K> FlingAnimation(K object, FloatProperty<K> property) {
         super(object, property);
         mFlingForce.setValueThreshold(getValueThreshold());
     }

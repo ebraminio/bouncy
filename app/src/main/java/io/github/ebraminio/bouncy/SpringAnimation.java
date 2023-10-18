@@ -17,6 +17,7 @@ package io.github.ebraminio.bouncy;
 
 import android.os.Looper;
 import android.util.AndroidRuntimeException;
+import android.util.FloatProperty;
 
 /**
  * SpringAnimation is an animation that is driven by a {@link SpringForce}. The spring force defines
@@ -82,11 +83,11 @@ public final class SpringAnimation extends DynamicAnimation<SpringAnimation> {
      * Note, a spring will need to setup through {@link #setSpring(SpringForce)} before
      * the animation starts.
      *
-     * @param object the Object whose property will be animated
+     * @param object   the Object whose property will be animated
      * @param property the property to be animated
-     * @param <K> the class on which the Property is declared
+     * @param <K>      the class on which the Property is declared
      */
-    public <K> SpringAnimation(K object, FloatPropertyCompat<K> property) {
+    public <K> SpringAnimation(K object, FloatProperty<K> property) {
         super(object, property);
     }
 
@@ -95,13 +96,12 @@ public final class SpringAnimation extends DynamicAnimation<SpringAnimation> {
      * be created with the given final position and default stiffness and damping ratio.
      * This spring can be accessed and reconfigured through {@link #setSpring(SpringForce)}.
      *
-     * @param object the Object whose property will be animated
-     * @param property the property to be animated
+     * @param object        the Object whose property will be animated
+     * @param property      the property to be animated
      * @param finalPosition the final position of the spring to be created.
-     * @param <K> the class on which the Property is declared
+     * @param <K>           the class on which the Property is declared
      */
-    public <K> SpringAnimation(K object, FloatPropertyCompat<K> property,
-                               float finalPosition) {
+    public <K> SpringAnimation(K object, FloatProperty<K> property, float finalPosition) {
         super(object, property);
         mSpring = new SpringForce(finalPosition);
     }
