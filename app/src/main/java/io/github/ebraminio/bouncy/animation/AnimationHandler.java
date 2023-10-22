@@ -15,13 +15,8 @@ package io.github.ebraminio.bouncy.animation;
  * limitations under the License.
  */
 
-import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.SystemClock;
 import android.view.Choreographer;
-
-import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,7 +60,6 @@ class AnimationHandler {
         }
     }
 
-    private static final long FRAME_DELAY_MS = 10;
     public static final ThreadLocal<AnimationHandler> sAnimatorHandler = new ThreadLocal<>();
 
     /**
@@ -109,11 +103,7 @@ class AnimationHandler {
     @SuppressWarnings("WeakerAccess") /* synthetic access */
     AnimationFrameCallbackProvider getProvider() {
         if (mProvider == null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                mProvider = new FrameCallbackProvider16(mCallbackDispatcher);
-            } else {
-                mProvider = new FrameCallbackProvider14(mCallbackDispatcher);
-            }
+            mProvider = new AnimationFrameCallbackProvider(mCallbackDispatcher);
         }
         return mProvider;
     }
@@ -193,72 +183,23 @@ class AnimationHandler {
 
     /**
      * Default provider of timing pulse that uses Choreographer for frame callbacks.
-     */
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
-    private static class FrameCallbackProvider16 extends AnimationFrameCallbackProvider {
-
-        private final Choreographer mChoreographer = Choreographer.getInstance();
-        private final Choreographer.FrameCallback mChoreographerCallback;
-
-        FrameCallbackProvider16(AnimationCallbackDispatcher dispatcher) {
-            super(dispatcher);
-            mChoreographerCallback = new Choreographer.FrameCallback() {
-                @Override
-                public void doFrame(long frameTimeNanos) {
-                    mDispatcher.dispatchAnimationFrame();
-                }
-            };
-        }
-
-        @Override
-        void postFrameCallback() {
-            mChoreographer.postFrameCallback(mChoreographerCallback);
-        }
-    }
-
-    /**
-     * Frame provider for ICS and ICS-MR1 releases. The frame callback is achieved via posting
-     * a Runnable to the main thread Handler with a delay.
-     */
-    private static class FrameCallbackProvider14 extends AnimationFrameCallbackProvider {
-
-        private final Runnable mRunnable;
-        private final Handler mHandler;
-        long mLastFrameTime = -1;
-
-        FrameCallbackProvider14(AnimationCallbackDispatcher dispatcher) {
-            super(dispatcher);
-            mRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    mLastFrameTime = SystemClock.uptimeMillis();
-                    mDispatcher.dispatchAnimationFrame();
-                }
-            };
-            mHandler = new Handler(Looper.myLooper());
-        }
-
-        @Override
-        void postFrameCallback() {
-            long delay = FRAME_DELAY_MS - (SystemClock.uptimeMillis() - mLastFrameTime);
-            delay = Math.max(delay, 0);
-            mHandler.postDelayed(mRunnable, delay);
-        }
-    }
-
-    /**
+     *
      * The intention for having this interface is to increase the testability of ValueAnimator.
      * Specifically, we can have a custom implementation of the interface below and provide
      * timing pulse without using Choreographer. That way we could use any arbitrary interval for
      * our timing pulse in the tests.
      */
-    abstract static class AnimationFrameCallbackProvider {
-        final AnimationCallbackDispatcher mDispatcher;
+    private static class AnimationFrameCallbackProvider {
+
+        private final Choreographer mChoreographer = Choreographer.getInstance();
+        private final Choreographer.FrameCallback mChoreographerCallback;
 
         AnimationFrameCallbackProvider(AnimationCallbackDispatcher dispatcher) {
-            mDispatcher = dispatcher;
+            mChoreographerCallback = frameTimeNanos -> dispatcher.dispatchAnimationFrame();
         }
 
-        abstract void postFrameCallback();
+        void postFrameCallback() {
+            mChoreographer.postFrameCallback(mChoreographerCallback);
+        }
     }
 }
