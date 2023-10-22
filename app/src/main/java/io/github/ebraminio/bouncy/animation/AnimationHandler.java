@@ -1,4 +1,4 @@
-package io.github.ebraminio.bouncy;
+package io.github.ebraminio.bouncy.animation;
 /*
  * Copyright (C) 2017 The Android Open Source Project
  *

@@ -1,4 +1,4 @@
-package io.github.ebraminio.bouncy;
+package io.github.ebraminio.bouncy.animation;
 
 interface Force {
     // Acceleration based on position.

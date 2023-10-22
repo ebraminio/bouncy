@@ -22,6 +22,9 @@ import androidx.annotation.Nullable;
 
 import java.util.Random;
 
+import io.github.ebraminio.bouncy.animation.FlingAnimation;
+import io.github.ebraminio.bouncy.animation.FloatValueHolder;
+
 class Bouncy extends View {
     private final FloatValueHolder x = new FloatValueHolder();
     private final FlingAnimation horizontalFling = new FlingAnimation(x);

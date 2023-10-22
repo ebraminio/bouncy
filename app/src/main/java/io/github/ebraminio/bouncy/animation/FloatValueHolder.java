@@ -1,4 +1,4 @@
-package io.github.ebraminio.bouncy;
+package io.github.ebraminio.bouncy.animation;
 
 /*
  * Copyright (C) 2017 The Android Open Source Project
@@ -21,7 +21,7 @@ package io.github.ebraminio.bouncy;
  * i.e. {@link #setValue(float)} and {@link #getValue()}) to access this float value. Animations can
  * be performed on a FloatValueHolder instance. During each frame of the animation, the
  * FloatValueHolder will have its value updated via {@link #setValue(float)}. The caller can
- * obtain the up-to-date animation value via {@link androidx.dynamicanimation.animation.FloatValueHolder#getValue()}.
+ * obtain the up-to-date animation value via {@link FloatValueHolder#getValue()}.
  *
  * <p> Here is an example for creating a {@link FlingAnimation} with a FloatValueHolder:
  * <pre class="prettyprint">
@@ -32,8 +32,8 @@ package io.github.ebraminio.bouncy;
  * anim.start();
  * </pre>
  *
- * @see SpringAnimation#SpringAnimation(androidx.dynamicanimation.animation.FloatValueHolder)
- * @see FlingAnimation#FlingAnimation(androidx.dynamicanimation.animation.FloatValueHolder)
+ * @see SpringAnimation#SpringAnimation(FloatValueHolder)
+ * @see FlingAnimation#FlingAnimation(FloatValueHolder)
  */
 
 public final class FloatValueHolder {
