@@ -21,7 +21,6 @@ import android.util.FloatProperty;
 import android.view.View;
 
 import androidx.annotation.FloatRange;
-import androidx.annotation.RestrictTo;
 
 import java.util.ArrayList;
 
@@ -383,10 +382,7 @@ public abstract class DynamicAnimation<T extends DynamicAnimation<T>>
      * is then updated. The animation's ending conditions are also checked in this method. Once
      * the animation reaches equilibrium, the animation will come to its end, and end listeners
      * will be notified, if any.
-     *
-     * @hide
      */
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
     @Override
     public boolean doAnimationFrame(long frameTime) {
         if (mLastFrameTime == 0) {

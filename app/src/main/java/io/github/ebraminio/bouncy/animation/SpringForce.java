@@ -16,7 +16,6 @@ package io.github.ebraminio.bouncy.animation;
  */
 
 import androidx.annotation.FloatRange;
-import androidx.annotation.RestrictTo;
 
 /**
  * Spring Force defines the characteristics of the spring being used in the animation.
@@ -207,10 +206,6 @@ public final class SpringForce implements Force {
 
     /*********************** Below are private APIs *********************/
 
-    /**
-     * @hide
-     */
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
     @Override
     public float getAcceleration(float lastDisplacement, float lastVelocity) {
 
@@ -222,10 +217,6 @@ public final class SpringForce implements Force {
         return (float) (-k * lastDisplacement - c * lastVelocity);
     }
 
-    /**
-     * @hide
-     */
-    @RestrictTo(RestrictTo.Scope.LIBRARY)
     @Override
     public boolean isAtEquilibrium(float value, float velocity) {
         if (Math.abs(velocity) < mVelocityThreshold
