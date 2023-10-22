@@ -17,8 +17,6 @@ package io.github.ebraminio.bouncy.animation;
 
 import android.os.Looper;
 import android.util.AndroidRuntimeException;
-import android.util.FloatProperty;
-import android.view.View;
 
 import androidx.annotation.FloatRange;
 
@@ -37,17 +35,6 @@ import java.util.ArrayList;
  */
 public abstract class DynamicAnimation<T extends DynamicAnimation<T>>
         implements AnimationHandler.AnimationFrameCallback {
-
-    /**
-     * ViewProperty holds the access of a property of a {@link View}. When an animation is
-     * created with a {@link DynamicAnimation.ViewProperty} instance, the corresponding property value of the view
-     * will be updated through this ViewProperty instance.
-     */
-    public abstract static class ViewProperty extends FloatProperty<View> {
-        private ViewProperty(String name) {
-            super(name);
-        }
-    }
 
     /**
      * The minimum visible change in pixels that can be visible to users.
@@ -82,11 +69,8 @@ public abstract class DynamicAnimation<T extends DynamicAnimation<T>>
     // of starting through the getter and use that as the starting value of the animation.
     boolean mStartValueIsSet = false;
 
-    // Target to be animated.
-    final Object mTarget;
-
     // View property id.
-    final FloatProperty mProperty;
+    final FloatValueHolder mProperty;
 
     // Package private tracking of animation lifecycle state. Visible to subclass animations.
     boolean mRunning = false;
@@ -118,31 +102,7 @@ public abstract class DynamicAnimation<T extends DynamicAnimation<T>>
      * @param floatValueHolder the FloatValueHolder instance to be animated.
      */
     DynamicAnimation(final FloatValueHolder floatValueHolder) {
-        mTarget = null;
-        mProperty = new FloatProperty("FloatValueHolder") {
-            @Override
-            public Object get(Object object) {
-                return floatValueHolder.getValue();
-            }
-
-            @Override
-            public void setValue(Object object, float value) {
-                floatValueHolder.setValue(value);
-            }
-        };
-        mMinVisibleChange = MIN_VISIBLE_CHANGE_PIXELS;
-    }
-
-    /**
-     * Creates a dynamic animation to animate the given property for the given {@link View}
-     *
-     * @param object   the Object whose property is to be animated
-     * @param property the property to be animated
-     */
-
-    <K> DynamicAnimation(K object, FloatProperty<K> property) {
-        mTarget = object;
-        mProperty = property;
+        mProperty = floatValueHolder;
         mMinVisibleChange = MIN_VISIBLE_CHANGE_PIXELS;
     }
 
@@ -436,7 +396,7 @@ public abstract class DynamicAnimation<T extends DynamicAnimation<T>>
      * Updates the property value through the corresponding setter.
      */
     void setPropertyValue(float value) {
-        mProperty.setValue(mTarget, value);
+        mProperty.setValue(value);
         for (int i = 0; i < mUpdateListeners.size(); i++) {
             if (mUpdateListeners.get(i) != null) {
                 mUpdateListeners.get(i).onAnimationUpdate(this, mValue, mVelocity);
@@ -456,7 +416,7 @@ public abstract class DynamicAnimation<T extends DynamicAnimation<T>>
      * Obtain the property value through the corresponding getter.
      */
     private float getPropertyValue() {
-        return (float) mProperty.get(mTarget);
+        return (float) mProperty.getValue();
     }
 
     /****************Sub class animations**************/
