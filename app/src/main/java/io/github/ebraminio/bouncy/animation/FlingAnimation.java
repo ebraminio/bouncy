@@ -62,18 +62,6 @@ public final class FlingAnimation extends DynamicAnimation<FlingAnimation> {
     }
 
     /**
-     * This creates a FlingAnimation that animates the property of the given object.
-     *
-     * @param object   the Object whose property will be animated
-     * @param property the property to be animated
-     * @param <K>      the class on which the property is declared
-     */
-    public <K> FlingAnimation(K object, FloatProperty<K> property) {
-        super(object, property);
-        mFlingForce.setValueThreshold(getValueThreshold());
-    }
-
-    /**
      * Sets the friction for the fling animation. The greater the friction is, the sooner the
      * animation will slow down. When not set, the friction defaults to 1.
      *

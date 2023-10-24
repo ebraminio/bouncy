@@ -79,34 +79,6 @@ public final class SpringAnimation extends DynamicAnimation<SpringAnimation> {
     }
 
     /**
-     * This creates a SpringAnimation that animates the property of the given object.
-     * Note, a spring will need to setup through {@link #setSpring(SpringForce)} before
-     * the animation starts.
-     *
-     * @param object   the Object whose property will be animated
-     * @param property the property to be animated
-     * @param <K>      the class on which the Property is declared
-     */
-    public <K> SpringAnimation(K object, FloatProperty<K> property) {
-        super(object, property);
-    }
-
-    /**
-     * This creates a SpringAnimation that animates the property of the given object. A Spring will
-     * be created with the given final position and default stiffness and damping ratio.
-     * This spring can be accessed and reconfigured through {@link #setSpring(SpringForce)}.
-     *
-     * @param object        the Object whose property will be animated
-     * @param property      the property to be animated
-     * @param finalPosition the final position of the spring to be created.
-     * @param <K>           the class on which the Property is declared
-     */
-    public <K> SpringAnimation(K object, FloatProperty<K> property, float finalPosition) {
-        super(object, property);
-        mSpring = new SpringForce(finalPosition);
-    }
-
-    /**
      * Returns the spring that the animation uses for animations.
      *
      * @return the spring that the animation uses for animations
