@@ -17,9 +17,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import java.util.Random;
 
 import io.github.ebraminio.bouncy.animation.FlingAnimation;
@@ -32,7 +29,7 @@ class Bouncy extends View {
     private final FlingAnimation verticalFling = new FlingAnimation(y);
     private final GestureDetector flingDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
         @Override
-        public boolean onFling(@Nullable MotionEvent e1, @NonNull MotionEvent e2, float velocityX, float velocityY) {
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             horizontalFling.setStartVelocity(velocityX).start();
             verticalFling.setStartVelocity(velocityY).start();
             return true;
@@ -98,7 +95,7 @@ class Bouncy extends View {
     }
 
     @Override
-    protected void onDraw(@NonNull Canvas canvas) {
+    protected void onDraw(Canvas canvas) {
         // path.lineTo(x.getValue(), y.getValue());
         // canvas.drawPath(path, linesPaint);
         canvas.drawCircle(x.getValue(), y.getValue(), r, paint);

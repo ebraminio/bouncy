@@ -18,7 +18,7 @@ package io.github.ebraminio.bouncy.animation;
 
 import android.util.FloatProperty;
 
-import androidx.annotation.FloatRange;
+//import androidx.annotation.FloatRange;
 
 /**
  * <p>Fling animation is an animation that continues an initial momentum (most often from gesture
@@ -70,7 +70,8 @@ public final class FlingAnimation extends DynamicAnimation<FlingAnimation> {
      * @throws IllegalArgumentException if the input friction is not positive
      */
     public FlingAnimation setFriction(
-            @FloatRange(from = 0.0, fromInclusive = false) float friction) {
+//            @FloatRange(from = 0.0, fromInclusive = false)
+            float friction) {
         if (friction <= 0) {
             throw new IllegalArgumentException("Friction must be positive");
         }

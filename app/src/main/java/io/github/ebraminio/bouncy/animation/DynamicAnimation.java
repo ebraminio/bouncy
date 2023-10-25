@@ -18,7 +18,7 @@ package io.github.ebraminio.bouncy.animation;
 import android.os.Looper;
 import android.util.AndroidRuntimeException;
 
-import androidx.annotation.FloatRange;
+//import androidx.annotation.FloatRange;
 
 import java.util.ArrayList;
 
@@ -231,7 +231,7 @@ public abstract class DynamicAnimation<T extends DynamicAnimation<T>>
     }
 
 
-    public T setMinimumVisibleChange(@FloatRange(from = 0.0, fromInclusive = false)
+    public T setMinimumVisibleChange(//@FloatRange(from = 0.0, fromInclusive = false)
                                      float minimumVisibleChange) {
         if (minimumVisibleChange <= 0) {
             throw new IllegalArgumentException("Minimum visible change must be positive.");

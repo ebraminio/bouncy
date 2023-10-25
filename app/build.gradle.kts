@@ -38,5 +38,4 @@ android {
 }
 
 dependencies {
-    implementation(libs.annotation)
 }

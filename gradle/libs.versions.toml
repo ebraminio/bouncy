@@ -1,9 +1,5 @@
 [versions]
 agp = "8.1.2"
-annotation = "1.0.0" # don't upgrade, later versions add nonsense
-
-[libraries]
-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
