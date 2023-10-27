@@ -98,6 +98,7 @@ class Bouncy extends View {
             uniform float2 center;
             uniform float2 bounds;
             uniform float radius;
+            uniform int wall;
             layout(color) uniform vec4 color;
 
             float smin(float a, float b, float k) {
@@ -112,8 +113,9 @@ class Bouncy extends View {
 
             float4 main(float2 fragCoord) {
                 float d1 = (distance(fragCoord, center) - radius) / min(bounds.x, bounds.y);
-                float d2 = (distance(bounds - fragCoord, center) - radius) / min(bounds.x, bounds.y);
-                // float d2 = -sdBox(fragCoord * 2 * .99 - bounds * .99, bounds) / min(bounds.x, bounds.y);
+                float d2 = wall == 0
+                         ? (distance(bounds - fragCoord, center) - radius) / min(bounds.x, bounds.y)
+                         : -sdBox(fragCoord * 2 * .99 - bounds * .99, bounds) / min(bounds.x, bounds.y);
                 float d = smoothstep(0., 0.01, smin(d1, d2, 1 / 3. + 0.001));
                 return d < 1 ? color : vec4(0);
             }
@@ -126,6 +128,7 @@ class Bouncy extends View {
             shader.setFloatUniform("bounds", getWidth(), getHeight());
             shader.setFloatUniform("radius", r);
             shader.setColorUniform("color", paint.getColor());
+            shader.setIntUniform("wall", counter % 2);
             canvas.drawPaint(paint);
         } else {
             canvas.drawCircle(x.getValue(), y.getValue(), r, paint);
