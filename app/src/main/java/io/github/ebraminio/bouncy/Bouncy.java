@@ -85,16 +85,11 @@ class Bouncy extends View {
         return true;
     }
 
-    private boolean initialized = false;
-
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        if (initialized) return;
         x.setValue(w / 2f);
         y.setValue(h / 2f);
-        // path.moveTo(x.getValue(), y.getValue());
-        initialized = true;
         r = Math.min(w, h) / 20f;
     }
 
@@ -117,7 +112,8 @@ class Bouncy extends View {
 
             float4 main(float2 fragCoord) {
                 float d1 = (distance(fragCoord, center) - radius) / min(bounds.x, bounds.y);
-                float d2 = -sdBox(fragCoord * 2 * .99 - bounds * .99, bounds) / min(bounds.x, bounds.y);
+                float d2 = (distance(bounds - fragCoord, center) - radius) / min(bounds.x, bounds.y);
+                // float d2 = -sdBox(fragCoord * 2 * .99 - bounds * .99, bounds) / min(bounds.x, bounds.y);
                 float d = smoothstep(0., 0.01, smin(d1, d2, 1 / 3. + 0.001));
                 return d < 1 ? color : vec4(0);
             }
