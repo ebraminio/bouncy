@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RuntimeShader;
 import android.graphics.drawable.RippleDrawable;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -16,6 +17,8 @@ import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+
+import org.intellij.lang.annotations.Language;
 
 import java.util.Random;
 
@@ -36,13 +39,12 @@ class Bouncy extends View {
         }
     });
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    // private final Paint linesPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private RuntimeShader shader;
     private float r = 0;
     private float previousX = 0;
     private float previousY = 0;
     private float storedVelocityX = 0;
     private float storedVelocityY = 0;
-    // private final Path path = new Path();
     private final RippleDrawable rippleDrawable = new RippleDrawable(ColorStateList.valueOf(Color.WHITE), null, null);
 
     Bouncy(final Context context) {
@@ -60,9 +62,11 @@ class Bouncy extends View {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             paint.setColor(context.getColor(android.R.color.system_accent1_500));
         }
-        // linesPaint.setColor(Color.GRAY);
-        // linesPaint.setStyle(Paint.Style.STROKE);
         setFocusable(true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            shader = new RuntimeShader(shaderSource);
+            paint.setShader(shader);
+        }
     }
 
     @Override
@@ -94,11 +98,42 @@ class Bouncy extends View {
         r = Math.min(w, h) / 20f;
     }
 
+    @Language("AGSL")
+    private String shaderSource = """
+            uniform float2 center;
+            uniform float2 bounds;
+            uniform float radius;
+            layout(color) uniform vec4 color;
+
+            float smin(float a, float b, float k) {
+                float h = max(k - abs(a - b), 0) / k;
+                return min(a, b) - h * h * k / 4;
+            }
+
+            float sdBox(vec2 p, vec2 b) {
+                vec2 d = abs(p) - b;
+                return length(max(d, 0)) + min(max(d.x, d.y), 0);
+            }
+
+            float4 main(float2 fragCoord) {
+                float d1 = (distance(fragCoord, center) - radius) / min(bounds.x, bounds.y);
+                float d2 = -sdBox(fragCoord * 2 * .99 - bounds * .99, bounds) / min(bounds.x, bounds.y);
+                float d = smoothstep(0., 0.01, smin(d1, d2, 1 / 3. + 0.001));
+                return d < 1 ? color : vec4(0);
+            }
+            """;
+
     @Override
     protected void onDraw(Canvas canvas) {
-        // path.lineTo(x.getValue(), y.getValue());
-        // canvas.drawPath(path, linesPaint);
-        canvas.drawCircle(x.getValue(), y.getValue(), r, paint);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            shader.setFloatUniform("center", x.getValue(), y.getValue());
+            shader.setFloatUniform("bounds", getWidth(), getHeight());
+            shader.setFloatUniform("radius", r);
+            shader.setColorUniform("color", paint.getColor());
+            canvas.drawPaint(paint);
+        } else {
+            canvas.drawCircle(x.getValue(), y.getValue(), r, paint);
+        }
         var isWallHit = false;
         if (x.getValue() < r) {
             x.setValue(r);
