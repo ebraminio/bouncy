@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "io.github.ebraminio.bouncy"
-        minSdk = 26
+        minSdk = 1
         targetSdk = 34
         versionCode = 1
         versionName = "0.0.0"

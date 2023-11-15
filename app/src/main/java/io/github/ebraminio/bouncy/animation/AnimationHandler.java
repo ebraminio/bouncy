@@ -15,6 +15,7 @@ package io.github.ebraminio.bouncy.animation;
  * limitations under the License.
  */
 
+import android.os.Build;
 import android.os.SystemClock;
 import android.view.Choreographer;
 
@@ -183,7 +184,7 @@ class AnimationHandler {
 
     /**
      * Default provider of timing pulse that uses Choreographer for frame callbacks.
-     *
+     * <p>
      * The intention for having this interface is to increase the testability of ValueAnimator.
      * Specifically, we can have a custom implementation of the interface below and provide
      * timing pulse without using Choreographer. That way we could use any arbitrary interval for
@@ -191,7 +192,8 @@ class AnimationHandler {
      */
     private static class AnimationFrameCallbackProvider {
 
-        private final Choreographer mChoreographer = Choreographer.getInstance();
+        private final Choreographer mChoreographer =
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN ? Choreographer.getInstance() : null;
         private final Choreographer.FrameCallback mChoreographerCallback;
 
         AnimationFrameCallbackProvider(AnimationCallbackDispatcher dispatcher) {
@@ -199,7 +201,9 @@ class AnimationHandler {
         }
 
         void postFrameCallback() {
-            mChoreographer.postFrameCallback(mChoreographerCallback);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                mChoreographer.postFrameCallback(mChoreographerCallback);
+            }
         }
     }
 }

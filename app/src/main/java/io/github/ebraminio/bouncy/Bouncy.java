@@ -30,14 +30,15 @@ class Bouncy extends View {
     private final FlingAnimation horizontalFling = new FlingAnimation(x);
     private final FloatValueHolder y = new FloatValueHolder();
     private final FlingAnimation verticalFling = new FlingAnimation(y);
-    private final GestureDetector flingDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            horizontalFling.setStartVelocity(velocityX).start();
-            verticalFling.setStartVelocity(velocityY).start();
-            return true;
-        }
-    });
+    private final GestureDetector flingDetector = Build.VERSION.SDK_INT >= Build.VERSION_CODES.CUPCAKE ?
+            new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                    horizontalFling.setStartVelocity(velocityX).start();
+                    verticalFling.setStartVelocity(velocityY).start();
+                    return true;
+                }
+            }) : null;
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private RuntimeShader shader;
     private float r = 0;
@@ -45,11 +46,14 @@ class Bouncy extends View {
     private float previousY = 0;
     private float storedVelocityX = 0;
     private float storedVelocityY = 0;
-    private final RippleDrawable rippleDrawable = new RippleDrawable(ColorStateList.valueOf(Color.WHITE), null, null);
+    private final RippleDrawable rippleDrawable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ?
+            new RippleDrawable(ColorStateList.valueOf(Color.WHITE), null, null) : null;
 
     Bouncy(final Context context) {
         super(context);
-        setBackground(rippleDrawable);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            setBackground(rippleDrawable);
+        }
         horizontalFling.addUpdateListener((a, v, velocity) -> {
             storedVelocityX = velocity;
             invalidate();
@@ -190,10 +194,15 @@ class Bouncy extends View {
     private Random random = new Random();
 
     private void onWallHit() {
-        rippleDrawable.setColor(ColorStateList.valueOf(Color.argb(0x10, random.nextInt(256), random.nextInt(256), random.nextInt(256))));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            rippleDrawable.setColor(ColorStateList.valueOf(Color.argb(0x10, random.nextInt(256), random.nextInt(256), random.nextInt(256))));
+        }
         setPressed(false);
-        rippleDrawable.setHotspot(x.getValue(), y.getValue());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            rippleDrawable.setHotspot(x.getValue(), y.getValue());
+        }
         setPressed(true);
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.ECLAIR) return;
         performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
 
         final var index = ++counter % diatonicScale.length;
@@ -202,7 +211,8 @@ class Bouncy extends View {
             final var sampleRate = 44100;
             final var buffer =
                     guitarString(sampleRate, getStandardFrequency(MIDDLE_A_SEMITONE + note), 4);
-            final var audioTrack = new AudioTrack(
+            final AudioTrack audioTrack;
+            audioTrack = new AudioTrack(
                     AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
                     AudioFormat.ENCODING_PCM_16BIT, buffer.length, AudioTrack.MODE_STATIC
             );

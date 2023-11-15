@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
                 controller.hide(WindowInsets.Type.systemBars());
                 controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
             }
-        } else {
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             window.setBackgroundDrawable(new ColorDrawable(Color.WHITE));
             final View decorView = window.getDecorView();
             decorView.setSystemUiVisibility(
