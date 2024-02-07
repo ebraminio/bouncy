@@ -98,7 +98,7 @@ class Bouncy extends View {
     }
 
     @Language("AGSL")
-    private String shaderSource = """
+    private final String shaderSource = """
             uniform float2 center;
             uniform float2 bounds;
             uniform float radius;
@@ -189,9 +189,9 @@ class Bouncy extends View {
         return true;
     }
 
-    private int[] diatonicScale = {0, 2, 4, 5, 7, 9, 11, 12, 11, 9, 7, 5, 4, 2};
+    private final int[] diatonicScale = {0, 2, 4, 5, 7, 9, 11, 12, 11, 9, 7, 5, 4, 2};
     private int counter = 0;
-    private Random random = new Random();
+    private final Random random = new Random();
 
     private void onWallHit() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
