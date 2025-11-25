@@ -19,7 +19,7 @@ jobs:
       - name: Build APK
         run: ./gradlew assembleRelease --stacktrace
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v5
         with:
           name: bouncy
           path: app/build/outputs/apk/release/app-release.apk
