@@ -35,6 +35,8 @@ android {
             signingConfig = signingConfigs["debug"]
         }
     }
+
+    buildFeatures { resValues = false }
 }
 
 dependencies {
