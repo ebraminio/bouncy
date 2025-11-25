@@ -1,3 +1,5 @@
+import kotlin.collections.emptyList
+
 plugins {
     alias(libs.plugins.com.android.application)
 }
@@ -14,6 +16,8 @@ android {
         versionName = "0.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        vectorDrawables.generatedDensities()
     }
 
     // https://stackoverflow.com/a/75544119
