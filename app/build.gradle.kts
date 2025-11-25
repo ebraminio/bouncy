@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "io.github.ebraminio.bouncy"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "io.github.ebraminio.bouncy"
         minSdk = 1
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "0.0.0"
 
