@@ -1,5 +1,3 @@
-import kotlin.collections.emptyList
-
 plugins {
     alias(libs.plugins.com.android.application)
 }
