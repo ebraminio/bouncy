@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace = "io.github.ebraminio.bouncy"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "io.github.ebraminio.bouncy"
         minSdk = 1
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "0.0.0"
 
@@ -40,6 +40,10 @@ android {
     }
 
     buildFeatures { resValues = false }
+
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
 }
 
 dependencies {

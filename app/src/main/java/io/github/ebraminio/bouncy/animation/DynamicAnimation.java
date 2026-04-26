@@ -18,8 +18,6 @@ package io.github.ebraminio.bouncy.animation;
 import android.os.Looper;
 import android.util.AndroidRuntimeException;
 
-//import androidx.annotation.FloatRange;
-
 import java.util.ArrayList;
 
 /**
@@ -211,8 +209,7 @@ public abstract class DynamicAnimation<T extends DynamicAnimation<T>>
         if (isRunning()) {
             // Require update listener to be added before the animation, such as when we start
             // the animation, we know whether the animation is RenderThread compatible.
-            throw new UnsupportedOperationException("Error: Update listeners must be added before"
-                    + "the animation.");
+            throw new UnsupportedOperationException("Error: Update listeners must be added before the animation.");
         }
         if (!mUpdateListeners.contains(listener)) {
             mUpdateListeners.add(listener);
