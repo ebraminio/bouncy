@@ -1,0 +1,18 @@
+Bouncy is a simple, joyful little app: fling a ball across your screen, and
+watch it bounce off the walls — playing a cheerful musical note each time it
+hits.
+
+Every bounce produces a tone from the diatonic scale, so the ball essentially
+plays a little tune as it moves around. A visual effect (powered by Android's
+AGSL shader language) that changes by each wall hit.
+
+That's the whole app. No levels, no score, no accounts — just a ball, some
+physics, and a bit of music.
+
+Features:
+* Fling the ball with a swipe and watch it go
+* Each wall bounce plays a note from the diatonic musical scale
+* Smooth, realistic physics using Android's FlingAnimation
+* Visual glow effect rendered with AGSL distance field shaders
+* Extremely lightweight: the entire app is under 18 KB
+* No internet connection, no ads, no tracking, no permissions
