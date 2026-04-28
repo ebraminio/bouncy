@@ -211,8 +211,7 @@ class Bouncy extends View {
             final var sampleRate = 44100;
             final var buffer =
                     guitarString(sampleRate, getStandardFrequency(MIDDLE_A_SEMITONE + note), 4);
-            final AudioTrack audioTrack;
-            audioTrack = new AudioTrack(
+            final var audioTrack = new AudioTrack(
                     AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
                     AudioFormat.ENCODING_PCM_16BIT, buffer.length, AudioTrack.MODE_STATIC
             );
@@ -243,8 +242,8 @@ class Bouncy extends View {
 
         // Pick-direction lowpass filter
         final var rand = new Random();
-        final double[] random = new double[n];
-        double lastOut = (1 - p) * rand.nextDouble() * 2 - 1;
+        final var random = new double[n];
+        var lastOut = (1 - p) * rand.nextDouble() * 2 - 1;
         random[0] = lastOut;
         for (var i = 1; i < n; ++i) {
             lastOut = (1 - p) * (rand.nextDouble() * 2 - 1) + p * lastOut;
@@ -259,7 +258,7 @@ class Bouncy extends View {
             noise[i] = random[i] - (i < pick ? .0 : random[i - pick]);
         }
 
-        var samples = new double[(int) (sampleRate * duration)];
+        final var samples = new double[(int) (sampleRate * duration)];
         System.arraycopy(noise, 0, samples, 0, n);
 
         // First-order string-tuning allpass filter
@@ -287,10 +286,10 @@ class Bouncy extends View {
         }
 
         var max = .0;
-        for (final double sample : samples) max = Math.max(max, Math.abs(sample));
+        for (final var sample : samples) max = Math.max(max, Math.abs(sample));
 
         final var result = new short[samples.length];
-        for (int i = 0; i < result.length; ++i) {
+        for (var i = 0; i < result.length; ++i) {
             result[i] = (short) (samples[i] / max * Short.MAX_VALUE);
         }
         return result;
